@@ -17,9 +17,10 @@ export default function reducer (state = initialState, action = {}) {
 // Action Creators
 
 export const actions = {
-  setUserInfo () {
+  setUserInfo (data) {
     return {
-      type: types.SET_USER_INFO
+      type: types.SET_USER_INFO,
+      data
     }
   }
 }
