@@ -4281,14 +4281,9 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@2.x:
+date-fns@2.x, date-fns@^2.22.1:
   version "2.22.1"
   resolved "https://registry.nlark.com/date-fns/download/date-fns-2.22.1.tgz"
-  integrity sha1-Hlr5WYMeux2CmSv2e3ZQUtjw78Q=
-
-date-fns@^2.22.1:
-  version "2.22.1"
-  resolved "https://registry.nlark.com/date-fns/download/date-fns-2.22.1.tgz?cache=0&sync_timestamp=1622203670982&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdate-fns%2Fdownload%2Fdate-fns-2.22.1.tgz#1e5af959831ebb1d82992bf67b765052d8f0efc4"
   integrity sha1-Hlr5WYMeux2CmSv2e3ZQUtjw78Q=
 
 dayjs@1.x:
@@ -10469,11 +10464,7 @@ reduce-function-call@^1.0.1, reduce-function-call@^1.0.2:
 
 redux-persist@^6.0.0:
   version "6.0.0"
-<<<<<<< HEAD
-  resolved "https://registry.nlark.com/redux-persist/download/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
-=======
   resolved "https://registry.npm.taobao.org/redux-persist/download/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
->>>>>>> 3cb6cbcd11c3a4d5df1bf481d2d1a6d39d6ec36a
   integrity sha1-tNKXL5hZWXwTDUDUsUb+zatRs6g=
 
 redux-saga@^1.1.3:
@@ -12237,11 +12228,7 @@ utila@~0.4:
 
 utility-types@^3.10.0:
   version "3.10.0"
-<<<<<<< HEAD
-  resolved "https://registry.nlark.com/utility-types/download/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
-=======
   resolved "https://registry.npm.taobao.org/utility-types/download/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
->>>>>>> 3cb6cbcd11c3a4d5df1bf481d2d1a6d39d6ec36a
   integrity sha1-6kFI+adBAV8F7XT9YV4dIOa+2Cs=
 
 utils-merge@1.0.1:

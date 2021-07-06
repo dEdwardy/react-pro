@@ -12,10 +12,13 @@ import { Article } from '../article/Article'
 import { Ad } from '../ad/Ad'
 import { useState } from 'react'
 import './Home.scss'
+import { actions } from '../../store/user'
+import { useDispatch } from 'react-redux'
 
 const { SubMenu } = Menu
 const { Header, Content, Footer, Sider } = Layout
 export function Home (props) {
+  const dispatch = useDispatch()
   const history = useHistory()
   const rootSubmenuKeys = ['1', '2', '3', '4', '5']
   const [openKeys, setOpenKeys] = useState([])
@@ -32,14 +35,23 @@ export function Home (props) {
     // console.error(key,history)
     history.push(key)
   }
-  const handleClickMenu = e => {
-    console.error(e)
+  const handleClickMenu = ({ key }) => {
+    switch (key) {
+      case 'c':
+        dispatch(actions.setUserInfo({}))
+        history.push('/login')
+        break
+
+      default:
+        break
+    }
+    console.error(key)
   }
   const menu = (
     <Menu onClick={handleClickMenu} >
       <Menu.Item key="a">aaaaaaaa</Menu.Item>
       <Menu.Item key="b">bbbbbbb</Menu.Item>
-      <Menu.Item key="c">cccccccc</Menu.Item>
+      <Menu.Item key="c">Log out</Menu.Item>
     </Menu>
   )
 

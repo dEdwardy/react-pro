@@ -8,20 +8,33 @@ export function Article (props) {
   // const [pageConfig, setPageConfig] = useState({
 
   // })
-  const [data, setData] = useState({
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState(() => ({
     list: [],
     total: 0
-  })
-  const getArticleLsit = async (pageConfig = {}) => {
+  }))
+  const getArticleList = async (pageConfig = {}) => {
+    setLoading(true)
     const data = await post('/article', pageConfig)
-    setData(() => data)
+    setData(data)
+    setLoading(false)
+  }
+  const hanleTableChange = ({ current, pageSize }, filters, sorter) => {
+    let options = {}
+    const { columnKey, order } = sorter
+    const { category } = filters
+    if (order)options = { ...options, sortBy: { sortKey: columnKey, sortValue: order === 'ascend' ? 'ASC' : 'DESC' } }
+    if (category) options = { ...options, category }
+    getArticleList({
+      ...options,
+      page: current,
+      limit: pageSize
+    })
   }
   useEffect(async () => {
-    getArticleLsit()
+    getArticleList()
   }, [])
-  const handlePageChange = (page, pagesize) => {
 
-  }
   const columns = [
     {
       title: '标题',
@@ -47,17 +60,20 @@ export function Article (props) {
       dataIndex: 'tag',
       key: 'tag',
       render: (text, record, index) => {
-        return 'tag'
+        return (
+          record.tag.map(i => {
+            return (<span key={i.id}> {i.name} </span>)
+          })
+        )
       }
     },
     {
       title: '状态',
       dataIndex: 'state',
       key: 'state',
-      render: () => {
-        return 'state'
+      render: (text, record, index) => {
+        return record.state
       }
-
     },
     {
       title: '创建日期',
@@ -90,7 +106,14 @@ export function Article (props) {
   ]
   return (
     <div>
-      <Table size="small" columns={columns} dataSource={data.list} pagination={{ total: data.total, onChange: handlePageChange }}/>
+      <Table
+        loading={loading}
+        size="small"
+        columns={columns}
+        dataSource={data.list}
+        onChange= {hanleTableChange}
+        pagination={{ total: data.total }}
+      />
     </div>
   )
 }
