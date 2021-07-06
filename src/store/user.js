@@ -6,10 +6,13 @@ const initialState = {
   uinfo: { a: 1, b: 2 }
 }
 // Reducer
-export default function reducer (state = initialState, action = {}) {
+export default function reducer (state = initialState, action = { }) {
   switch (action.type) {
     case types.SET_USER_INFO:
-      return state
+      return {
+        ...state,
+        uinfo: action.data
+      }
     default:
       return state
   }
@@ -17,9 +20,10 @@ export default function reducer (state = initialState, action = {}) {
 // Action Creators
 
 export const actions = {
-  setUserInfo () {
+  setUserInfo (data) {
     return {
-      type: types.SET_USER_INFO
+      type: types.SET_USER_INFO,
+      data
     }
   }
 }

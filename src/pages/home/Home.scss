@@ -1,0 +1,32 @@
+.home {
+  :global(.ant-layout-header) {
+      display: flex !important;
+      background-color: red;
+  }
+
+  .header {
+    .logo {
+      float: left;
+      transition: all 0.3s ease-in-out;
+      font-style: italic;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      letter-spacing: 4px;
+      color: #fff;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 16px;
+    }
+  }
+  .avatar{
+    float: right;
+    .img{
+      cursor: pointer;
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+    }
+  }
+}

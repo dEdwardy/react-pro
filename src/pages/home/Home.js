@@ -1,104 +1,116 @@
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu, Breadcrumb, Dropdown } from 'antd'
 import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined
 } from '@ant-design/icons'
-import { Route, useHistory, BrowserRouter as Router } from 'react-router-dom'
+import { Route, useHistory } from 'react-router-dom'
 import { User } from '../user/User'
 import { Category } from '../category/Category'
 import { Tag } from '../tag/Tag'
 import { Article } from '../article/Article'
 import { Ad } from '../ad/Ad'
+import { useState } from 'react'
+import './Home.scss'
 
 const { SubMenu } = Menu
 const { Header, Content, Footer, Sider } = Layout
 export function Home (props) {
   const history = useHistory()
+  const rootSubmenuKeys = ['1', '2', '3', '4', '5']
+  const [openKeys, setOpenKeys] = useState([])
+
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys)
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
+    }
+  }
   const handleSelect = ({ key }) => {
     // console.error(key,history)
     history.push(key)
   }
+  const handleClickMenu = e => {
+    console.error(e)
+  }
+  const menu = (
+    <Menu onClick={handleClickMenu} >
+      <Menu.Item key="a">aaaaaaaa</Menu.Item>
+      <Menu.Item key="b">bbbbbbb</Menu.Item>
+      <Menu.Item key="c">cccccccc</Menu.Item>
+    </Menu>
+  )
+
   return (
-    <Router>
-      <Layout>
-        <Header className="header">
-          <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
-        </Header>
-        <Content
-          style={{ padding: '0 50px', height: 'calc(100vh - 64px - 70px)' }}
+    <Layout className="home">
+      <Header className="header" style={{ display: 'felx' }}>
+        <div className="logo">JJ Manage</div>
+        <div className="avatar">
+          <Dropdown arrow overlay={menu}>
+            <img className="img" src="http://edw4rd.cn/assets/avatar.jpg" />
+          </Dropdown>
+        </div>
+      </Header>
+      <Content
+        style={{ padding: '0 50px', height: 'calc(100vh - 64px - 70px)' }}
+      >
+        <Breadcrumb style={{ margin: '16px 0' }}>
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Breadcrumb.Item>App</Breadcrumb.Item>
+        </Breadcrumb>
+        <Layout
+          className="site-layout-background"
+          style={{ padding: '24px 0', height: '100%' }}
         >
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Layout
-            className="site-layout-background"
-            style={{ padding: '24px 0', height: '100%' }}
-          >
-            <Sider className="site-layout-background" width={200}>
-              <Menu
-                onSelect={(e) => handleSelect(e)}
-                mode="inline"
-                defaultSelectedKeys={[]}
-                defaultOpenKeys={['sub1']}
-                style={{ height: '100%' }}
-              >
-                <SubMenu key="1" icon={<UserOutlined />} title="用户管理">
-                  <Menu.Item key="/user">用户列表</Menu.Item>
-                </SubMenu>
-                <SubMenu key="2" icon={<LaptopOutlined />} title="文章管理">
-                  <Menu.Item key="/article">文章列表</Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="3"
-                  icon={<NotificationOutlined />}
-                  title="分类管理"
-                >
-                  <Menu.Item key="/category">分类列表</Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="4"
-                  icon={<NotificationOutlined />}
-                  title="标签管理"
-                >
-                  <Menu.Item key="/tag">标签列表</Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="5"
-                  icon={<NotificationOutlined />}
-                  title="广告管理"
-                >
-                  <Menu.Item key="/ad">广告列表</Menu.Item>
-                </SubMenu>
-              </Menu>
-            </Sider>
-            <Content
-              style={{
-                padding: '0 24px',
-                minHeight: 280,
-                overflow: 'auto scroll',
-                height: '100%'
-              }}
+          <Sider className="site-layout-background" width={200}>
+            <Menu
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              onSelect={(e) => handleSelect(e)}
+              mode="inline"
+              defaultSelectedKeys={[]}
+              defaultOpenKeys={[]}
+              style={{ height: '100%' }}
             >
-              <Route path="/user" component={User} />
-              <Route path="/category" component={Category} />
-              <Route path="/tag" component={Tag} />
-              <Route path="/article" component={Article} />
-              <Route path="/ad" component={Ad} />
-            </Content>
-          </Layout>
-        </Content>
-        <Footer className="login" style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
-      </Layout>
-    </Router>
+              <SubMenu key="1" icon={<UserOutlined />} title="用户管理">
+                <Menu.Item key="/user">用户列表</Menu.Item>
+              </SubMenu>
+              <SubMenu key="2" icon={<LaptopOutlined />} title="文章管理">
+                <Menu.Item key="/article">文章列表</Menu.Item>
+              </SubMenu>
+              <SubMenu key="3" icon={<NotificationOutlined />} title="分类管理">
+                <Menu.Item key="/category">分类列表</Menu.Item>
+              </SubMenu>
+              <SubMenu key="4" icon={<NotificationOutlined />} title="标签管理">
+                <Menu.Item key="/tag">标签列表</Menu.Item>
+              </SubMenu>
+              <SubMenu key="5" icon={<NotificationOutlined />} title="广告管理">
+                <Menu.Item key="/ad">广告列表</Menu.Item>
+              </SubMenu>
+            </Menu>
+          </Sider>
+          <Content
+            style={{
+              padding: '0 24px',
+              minHeight: 280,
+              overflow: 'auto scroll',
+              height: '100%'
+            }}
+          >
+            <Route path="/user" component={User} />
+            <Route path="/category" component={Category} />
+            <Route path="/tag" component={Tag} />
+            <Route path="/article" component={Article} />
+            <Route path="/ad" component={Ad} />
+          </Content>
+        </Layout>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>
+        Ant Design ©2018 Created by Ant UED
+      </Footer>
+    </Layout>
   )
 }
