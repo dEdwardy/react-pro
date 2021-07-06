@@ -1,92 +1,93 @@
 import { Form, Input, Button, Checkbox, notification } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import useFetch from 'use-http'
+import { actions } from '../../store/user'
+
 import './Login.scss'
-import { types } from '../../store/user'
-import { useDispatch } from 'react-redux'
+
 export function Login () {
+  const history = useHistory()
+  const token = useSelector(state => state?.user?.uinfo?.token)
+  if (token)history.push('/')
   const dispatch = useDispatch()
-  const { post, loading } = useFetch('http://localhost:3000')
+  const { post } = useFetch('http://localhost:3000')
   const onFinish = async (values) => {
+    console.log('Success:', values)
     const { remember, ...form } = values
     const data = await post('/auth/login', form)
     if (data) {
-      console.error('data', data)
-      await dispatch({
-        type: types.SET_USER_INFO,
-        data
+      dispatch(actions.setUserInfo(data))
+      notification.success({
+        message: '登录成功'
       })
+      history.push('/')
+      console.error('data', data)
     }
   }
   const onFinishFailed = ({ errorFields: [{ name }] }) => {
-    notification.error({
-      message: name.includes('username') ? '请输入账号' : '请输入密码',
-      duration: 1
-    })
+    if (name.includes('username')) {
+      notification.error({
+        message: '请输入账号'
+      })
+    } else {
+      notification.error({
+        message: '请输入密码'
+      })
+    }
   }
   return (
     <div className="login">
       <div className="login-form">
-        <div className="title">JJ_Manage</div>
+        <h3>JJ_Manage</h3>
         <div>
           <Form
-            requiredMark={false}
-            name="normal_login"
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
+            requiredMark={false}
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              validateFirst={false}
+              label=""
               name="username"
               rules={[{ required: true, message: '' }]}
             >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-              />
+              <Input style={{ width: '240px' }} placeholder="账号" />
             </Form.Item>
+
             <Form.Item
-              validateFirst={false}
+              label=""
               name="password"
               rules={[{ required: true, message: '' }]}
             >
-              <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox style={{ color: '#fff' }}>Remember me</Checkbox>
-                </Form.Item>
-
-                <a className="login-form-forgot" href="">
-                  Forgot password
-                </a>
-              </div>
+              <Input.Password style={{ width: '240px' }} placeholder="密码" />
             </Form.Item>
 
-            <Form.Item>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                {/* Or <a href="">register now!</a> */}
-                <Button
-                  loading={ loading}
-                  type="primary"
-                  htmlType="submit"
-                  className="login-form-button"
-                >
-                  Log in
-                </Button>
-              </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '240px',
+                padding: '4px 0 12px 0'
+              }}
+            >
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox style={{ color: '#fff' }}>Remember me</Checkbox>
+              </Form.Item>
+
+              <a className="login-form-forgot" href="">
+                Forgot password
+              </a>
+            </div>
+
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
             </Form.Item>
           </Form>
         </div>
