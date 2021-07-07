@@ -1,25 +1,5 @@
-import axios from 'axios'
-
-export const baseUrl = 'http://localhost:3000'
-
-// axios的实例及拦截器配置
-const instance = axios.create({
-  baseURL: baseUrl
-})
-instance.interceptors.request.use(
-  config => config,
-  err => {
-    return Promise.reject(err)
-  }
-)
-
-instance.interceptors.response.use(
-  res => res.data,
-  err => {
-    return Promise.reject(err)
-  }
-)
-
-export {
-  instance
-}
+import { instance } from '@/utils/service'
+export const auth = (data) => instance('/auth/login', { method: 'POST', data })
+export const getDict = () => instance('/user/dict')
+export const getArticle = (data) => instance('/article', { method: 'POST', data })
+export const getArtilceDetail = id => instance(`/article/${id}`)

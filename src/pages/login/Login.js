@@ -1,28 +1,28 @@
 import { Form, Input, Button, Checkbox, notification } from 'antd'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import useFetch from 'use-http'
 import { actions } from '../../store/user'
+import { auth } from '@/api'
 
 import './Login.scss'
 
 export function Login () {
   const history = useHistory()
-  const token = useSelector(state => state?.user?.uinfo?.token)
-  if (token)history.push('/')
+  const token = useSelector((state) => state?.user?.uinfo?.token)
   const dispatch = useDispatch()
-  const { post } = useFetch('http://localhost:3000')
   const onFinish = async (values) => {
-    console.log('Success:', values)
     const { remember, ...form } = values
-    const data = await post('/auth/login', form)
-    if (data) {
-      dispatch(actions.setUserInfo(data))
+    const uinfo = await auth(form)
+    if (uinfo) {
+      localStorage.setItem('token', uinfo.token)
+      dispatch(actions.setUserInfo(uinfo))
+      await dispatch({ type: 'FETCH_DICT' })
       notification.success({
         message: '登录成功'
       })
       history.push('/')
-      console.error('data', data)
+      console.error('uinfo', uinfo)
     }
   }
   const onFinishFailed = ({ errorFields: [{ name }] }) => {
@@ -36,6 +36,9 @@ export function Login () {
       })
     }
   }
+  useEffect(() => {
+    if (token) history.push('/')
+  }, [])
   return (
     <div className="login">
       <div className="login-form">

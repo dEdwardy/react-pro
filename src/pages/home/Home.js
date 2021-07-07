@@ -5,19 +5,26 @@ import {
   NotificationOutlined
 } from '@ant-design/icons'
 import { Route, useHistory } from 'react-router-dom'
-import { User } from '../user/User'
-import { Category } from '../category/Category'
-import { Tag } from '../tag/Tag'
-import { Article } from '../article/Article'
-import { Ad } from '../ad/Ad'
-import { useState } from 'react'
+// import  User  from '../user/User'
+// import  Category  from '../category/Category'
+// import  Tag  from '../tag/Tag'
+// import  Article  from '../article/Article'
+// import  Ad  from '../ad/Ad'
+import { useState, lazy, Suspense } from 'react'
 import './Home.scss'
 import { actions } from '../../store/user'
 import { useDispatch } from 'react-redux'
+// import ArticleDetail from '../article/ArticleDetail'
 
 const { SubMenu } = Menu
 const { Header, Content, Footer, Sider } = Layout
 export function Home (props) {
+  const User = lazy(() => import('../user/User'))
+  const Category = lazy(() => import('../category/Category'))
+  const Tag = lazy(() => import('../tag/Tag'))
+  const Ad = lazy(() => import('../ad/Ad'))
+  const Article = lazy(() => import('../article/Article'))
+  const ArticleDetail = lazy(() => import('../article/ArticleDetail'))
   const dispatch = useDispatch()
   const history = useHistory()
   const rootSubmenuKeys = ['1', '2', '3', '4', '5']
@@ -48,7 +55,7 @@ export function Home (props) {
     console.error(key)
   }
   const menu = (
-    <Menu onClick={handleClickMenu} >
+    <Menu onClick={handleClickMenu}>
       <Menu.Item key="a">aaaaaaaa</Menu.Item>
       <Menu.Item key="b">bbbbbbb</Menu.Item>
       <Menu.Item key="c">Log out</Menu.Item>
@@ -68,14 +75,14 @@ export function Home (props) {
       <Content
         style={{ padding: '0 50px', height: 'calc(100vh - 64px - 70px)' }}
       >
-        <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb style={{ marginTop: '12px' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>List</Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb>
         <Layout
           className="site-layout-background"
-          style={{ padding: '24px 0', height: '100%' }}
+          style={{ padding: '12px 0', height: 'calc(100% - 12px)' }}
         >
           <Sider className="site-layout-background" width={200}>
             <Menu
@@ -112,11 +119,14 @@ export function Home (props) {
               height: '100%'
             }}
           >
-            <Route path="/user" component={User} />
-            <Route path="/category" component={Category} />
-            <Route path="/tag" component={Tag} />
-            <Route path="/article" component={Article} />
-            <Route path="/ad" component={Ad} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Route path="/user" component={User} />
+              <Route path="/category" component={Category} />
+              <Route path="/tag" component={Tag} />
+              <Route exact path="/article" component={Article} />
+              <Route path="/article/:id" component={ArticleDetail} />
+              <Route path="/ad" component={Ad} />
+            </Suspense>
           </Content>
         </Layout>
       </Content>

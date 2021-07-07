@@ -3,7 +3,7 @@ import useFetch from 'use-http'
 import { Table, Menu, Dropdown } from 'antd'
 import { useEffect, useState } from 'react'
 
-export function User (props) {
+export default function User (props) {
   const columns = [
     {
       title: '用户名',
@@ -46,7 +46,7 @@ export function User (props) {
   }, [])
   return (
     <div>
-      <Table columns={columns} dataSource={userList} />
+      <Table columns={columns} dataSource={userList} pagination={{ showSizeChanger: true }} />
     </div>
   )
 }

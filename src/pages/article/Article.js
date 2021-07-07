@@ -1,30 +1,43 @@
 /* eslint-disable react/display-name */
 import { format, parseISO } from 'date-fns'
-import { Table } from 'antd'
+import { Table, Button } from 'antd'
 import { useState, useEffect } from 'react'
-import useFetch from 'use-http'
-export function Article (props) {
-  const { post } = useFetch('http://localhost:3000')
+// import useFetch from 'use-http'
+import { useSelector } from 'react-redux'
+import { getArticle } from '@/api'
+import { useHistory } from 'react-router-dom'
+export default function Article (props) {
+  // const { post } = useFetch('http://localhost:3000')
   // const [pageConfig, setPageConfig] = useState({
 
   // })
+  const history = useHistory()
+  const categories = useSelector(state => state?.user?.dict?.category?.map(({ name, id }) => ({ text: name, value: id })) ?? [])
+  const tags = useSelector(state => state?.user?.dict?.tag?.map(({ name, id }) => ({ text: name, value: id })) ?? [])
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(() => ({
     list: [],
     total: 0
   }))
+  const handleClickArticle = id => {
+    console.error(id)
+    history.push({
+      pathname: `/article/${id}`
+    })
+  }
   const getArticleList = async (pageConfig = {}) => {
     setLoading(true)
-    const data = await post('/article', pageConfig)
+    const data = await getArticle(pageConfig)
     setData(data)
     setLoading(false)
   }
   const hanleTableChange = ({ current, pageSize }, filters, sorter) => {
     let options = {}
     const { columnKey, order } = sorter
-    const { category } = filters
+    const { category, tag } = filters
     if (order)options = { ...options, sortBy: { sortKey: columnKey, sortValue: order === 'ascend' ? 'ASC' : 'DESC' } }
     if (category) options = { ...options, category }
+    if (tag)options = { ...options, tag }
     getArticleList({
       ...options,
       page: current,
@@ -52,13 +65,24 @@ export function Article (props) {
       title: '分类',
       dataIndex: 'category',
       key: 'category',
-      width: 120
+      width: 100,
+      filters: categories,
+      filterMultiple: false,
+      render: (text, record, index) => {
+        return (
+          <span>
+            { record.category.name }
+          </span>
+        )
+      }
     },
     {
       title: '标签',
       ellipsis: true,
       dataIndex: 'tag',
       key: 'tag',
+      filters: tags,
+      width: 100,
       render: (text, record, index) => {
         return (
           record.tag.map(i => {
@@ -78,6 +102,7 @@ export function Article (props) {
     {
       title: '创建日期',
       dataIndex: 'created',
+      width: 120,
       key: 'created',
       render: (text, record, index) => {
         // utc => paseISO => format
@@ -88,6 +113,7 @@ export function Article (props) {
     {
       title: '更新日期',
       dataIndex: 'updated',
+      width: 120,
       key: 'updated',
       render: (text, record, index) => {
         // utc => paseISO => format
@@ -97,10 +123,15 @@ export function Article (props) {
     },
     {
       title: 'operation',
-      width: 250,
+      width: 220,
       key: 'operation',
-      render: () => {
-        return 'actions'
+      render: (text, record, index) => {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Button size="small" onClick={() => handleClickArticle(record.id)}>查看</Button>
+          </div>
+
+        )
       }
     }
   ]

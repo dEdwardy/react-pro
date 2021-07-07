@@ -2,7 +2,7 @@
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import useFetch from 'use-http'
-export function Tag () {
+export default function Tag () {
   const [tagList, setTagList] = useState([])
   const { get } = useFetch('http://localhost:3000')
   useEffect(async () => {

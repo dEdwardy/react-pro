@@ -2,7 +2,7 @@
 import { Table } from 'antd'
 import { useState, useEffect } from 'react'
 import useFetch from 'use-http'
-export function Category (props) {
+export default function Category (props) {
   const { get } = useFetch('http://localhost:3000')
   const [categoryList, setCategoryList] = useState([])
   useEffect(async () => {

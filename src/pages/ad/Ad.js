@@ -2,7 +2,7 @@
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import useFetch from 'use-http'
-export function Ad () {
+export default function Ad () {
   const [adList, setAdList] = useState([])
   const { get } = useFetch('http://localhost:3000')
   useEffect(async () => {
