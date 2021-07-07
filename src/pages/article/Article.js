@@ -138,12 +138,13 @@ export default function Article (props) {
   return (
     <div>
       <Table
+        rowKey="id"
         loading={loading}
         size="small"
         columns={columns}
         dataSource={data.list}
         onChange= {hanleTableChange}
-        pagination={{ total: data.total }}
+        pagination={{ total: data.total, showSizeChanger: true }}
       />
     </div>
   )

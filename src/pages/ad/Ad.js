@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
-import useFetch from 'use-http'
+import { getAds } from '@/api'
 export default function Ad () {
   const [adList, setAdList] = useState([])
-  const { get } = useFetch('http://localhost:3000')
   useEffect(async () => {
-    const data = await get('/ad')
+    const data = await getAds()
     setAdList(() => data)
   }, [])
   const columns = [
@@ -39,7 +38,7 @@ export default function Ad () {
   ]
   return (
     <div className="tag">
-      <Table size="small" columns={columns} dataSource={adList} />
+      <Table rowKey="id" size="small" columns={columns} dataSource={adList} />
     </div>
   )
 }

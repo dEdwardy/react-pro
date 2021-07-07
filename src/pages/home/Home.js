@@ -4,32 +4,31 @@ import {
   LaptopOutlined,
   NotificationOutlined
 } from '@ant-design/icons'
-import { Route, useHistory } from 'react-router-dom'
-// import  User  from '../user/User'
-// import  Category  from '../category/Category'
-// import  Tag  from '../tag/Tag'
-// import  Article  from '../article/Article'
-// import  Ad  from '../ad/Ad'
-import { useState, lazy, Suspense } from 'react'
+import { Route, useHistory, Switch } from 'react-router-dom'
+// import User from '../user/User'
+// import Category from '../category/Category'
+// import Tag from '../tag/Tag'
+// import Article from '../article/Article'
+// import Ad from '../ad/Ad'
+// import ArticleDetail from '../article/ArticleDetail'
+import { useState, lazy, Suspense, useMemo } from 'react'
 import './Home.scss'
 import { actions } from '../../store/user'
 import { useDispatch } from 'react-redux'
-// import ArticleDetail from '../article/ArticleDetail'
 
 const { SubMenu } = Menu
 const { Header, Content, Footer, Sider } = Layout
 export function Home (props) {
+  const [openKeys, setOpenKeys] = useState([])
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const rootSubmenuKeys = ['1', '2', '3', '4', '5']
   const User = lazy(() => import('../user/User'))
   const Category = lazy(() => import('../category/Category'))
   const Tag = lazy(() => import('../tag/Tag'))
   const Ad = lazy(() => import('../ad/Ad'))
   const Article = lazy(() => import('../article/Article'))
   const ArticleDetail = lazy(() => import('../article/ArticleDetail'))
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const rootSubmenuKeys = ['1', '2', '3', '4', '5']
-  const [openKeys, setOpenKeys] = useState([])
-
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -39,7 +38,6 @@ export function Home (props) {
     }
   }
   const handleSelect = ({ key }) => {
-    // console.error(key,history)
     history.push(key)
   }
   const handleClickMenu = ({ key }) => {
@@ -48,7 +46,6 @@ export function Home (props) {
         dispatch(actions.setUserInfo({}))
         history.push('/login')
         break
-
       default:
         break
     }
@@ -61,13 +58,33 @@ export function Home (props) {
       <Menu.Item key="c">Log out</Menu.Item>
     </Menu>
   )
-
+  const innerRoute = [
+    {
+      path: '/user',
+      component: User
+    }, {
+      path: '/category',
+      component: Category
+    }, {
+      path: '/tag',
+      component: Tag
+    }, {
+      path: '/article',
+      component: Article
+    }, {
+      path: '/article/:id',
+      component: ArticleDetail
+    }, {
+      path: '/ad',
+      component: Ad
+    }
+  ]
   return (
     <Layout className="home">
-      <Header className="header" style={{ display: 'felx' }}>
+      <Header className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="logo">JJ Manage</div>
         <div className="avatar">
-          <Dropdown arrow overlay={menu}>
+          <Dropdown overlay={menu}>
             <img className="img" src="http://edw4rd.cn/assets/avatar.jpg" />
           </Dropdown>
         </div>
@@ -120,12 +137,13 @@ export function Home (props) {
             }}
           >
             <Suspense fallback={<div>Loading...</div>}>
-              <Route path="/user" component={User} />
-              <Route path="/category" component={Category} />
-              <Route path="/tag" component={Tag} />
-              <Route exact path="/article" component={Article} />
-              <Route path="/article/:id" component={ArticleDetail} />
-              <Route path="/ad" component={Ad} />
+              <Switch>
+              {
+                innerRoute.map((item) => {
+                  return useMemo(() => <Route key={item.path} exact path={item.path} component={item.component} />, history.location.pathname)
+                })
+              }
+              </Switch>
             </Suspense>
           </Content>
         </Layout>

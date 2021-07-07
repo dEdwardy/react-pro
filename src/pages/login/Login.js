@@ -22,7 +22,6 @@ export function Login () {
         message: '登录成功'
       })
       history.push('/')
-      console.error('uinfo', uinfo)
     }
   }
   const onFinishFailed = ({ errorFields: [{ name }] }) => {

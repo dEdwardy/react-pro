@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
 import { Table } from 'antd'
 import { useEffect, useState } from 'react'
-import useFetch from 'use-http'
+import { getTagList } from '@/api'
 export default function Tag () {
   const [tagList, setTagList] = useState([])
-  const { get } = useFetch('http://localhost:3000')
   useEffect(async () => {
-    const { list } = await get('/tag/list')
+    const { list } = await getTagList()
     setTagList(() => list)
   }, [])
   const columns = [
@@ -28,7 +27,7 @@ export default function Tag () {
   ]
   return (
     <div className="tag">
-      <Table size="small" columns={columns} dataSource={tagList} />
+      <Table rowKey="id" size="small" columns={columns} dataSource={tagList} />
     </div>
   )
 }

@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
 import { Table } from 'antd'
 import { useState, useEffect } from 'react'
-import useFetch from 'use-http'
+import { getCategoryList } from '@/api'
 export default function Category (props) {
-  const { get } = useFetch('http://localhost:3000')
   const [categoryList, setCategoryList] = useState([])
   useEffect(async () => {
-    const { list } = await get('/category/list')
+    const { list } = await getCategoryList()
     setCategoryList(() => list)
   }, [])
   const columns = [
@@ -30,7 +29,7 @@ export default function Category (props) {
   ]
   return (
     <div>
-      <Table columns={columns} dataSource={categoryList}/>
+      <Table rowKey="id" columns={columns} dataSource={categoryList}/>
     </div>
   )
 }

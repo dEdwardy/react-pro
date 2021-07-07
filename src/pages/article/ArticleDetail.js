@@ -22,8 +22,6 @@ export default function ArticleDetail () {
     <div>
       detail {params.id}
       <div>
-      {/* <div dangerouslySetInnerHTML={rawHtmlData}>
-      </div> */}
       <ReactQuill readOnly value={detail.content } toolbar={[]} />
       </div>
     </div>
