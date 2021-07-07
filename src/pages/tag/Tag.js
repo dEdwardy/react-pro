@@ -27,7 +27,7 @@ export default function Tag () {
   ]
   return (
     <div className="tag">
-      <Table rowKey="id" size="small" columns={columns} dataSource={tagList} />
+      <Table rowKey="id" size="small" columns={columns} dataSource={tagList} pagination={{ showSizeChanger: true }} />
     </div>
   )
 }
